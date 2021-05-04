@@ -25,3 +25,20 @@ body {
   --primary: rgb(20, 89, 228);
   --primary-rgb: 20, 89, 228;
 }
+.alert-danger {
+  margin: 24px 0;
+  padding: 16px 24px;
+  border-radius: 4px;
+  color: #f8f8f8;
+  background: #c00b;
+  font-weight: 600;
+  line-height: 150%;
+}
+.wrapper {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-direction: column;
+  height: 100%;
+  background: #f8f8f8;
+}

@@ -4,9 +4,21 @@ import axios from "axios";
 
 Vue.use(Vuex);
 
+var filterTurkish = (str) => {
+  return str
+    .toString()
+    .toLowerCase()
+    .replace("i̇", "i")
+    .replace("ü", "u")
+    .replace("ş", "s")
+    .replace("ö", "o")
+    .replace("ğ", "g")
+    .replace("ç", "c");
+};
+
 export default new Vuex.Store({
   state: {
-    prayerTimes: [],
+    prayerTimes: null,
     city: "İstanbul",
   },
   getters: {
@@ -14,7 +26,15 @@ export default new Vuex.Store({
       return state.prayerTimes;
     },
     city(state) {
-      return state.city;
+      return filterTurkish(state.city);
+    },
+    times_text(state) {
+      var text = `${state.city}+için+namaz+vakitleri:+`;
+      state.prayerTimes.forEach((data) => {
+        text += data.vakit + ":";
+        text += data.saat + " / ";
+      });
+      return text;
     },
   },
   mutations: {
@@ -27,11 +47,12 @@ export default new Vuex.Store({
   },
   actions: {
     prayerTimes(context, payload) {
-      let url =
+      let url = null;
+      url =
         "https://api.collectapi.com/pray/all?data.city=" +
-        payload.toString().toLocaleLowerCase("en-EN");
+        filterTurkish(payload);
       axios
-        .get(url, {
+        .get(url == "i%CC%87stanbul" ? "istanbul" : url, {
           headers: {
             authorization:
               "apikey 44xvqEJYLheQH1HTCTm9ZV:4WX5U0SFGvcM0SBxvqGkhZ",

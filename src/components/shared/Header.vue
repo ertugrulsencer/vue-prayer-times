@@ -5,12 +5,12 @@
         <i class="icon fas fa-mosque"></i>
         Namaz Vakitleri
       </div>
-      <div class="search">
+      <form @submit.prevent="getList" class="search">
         <input v-model.trim="city" type="text" placeholder="Şehir Arayın" />
-        <button @click="getList">
+        <button type="submit">
           <i class="fas fa-search"></i>
         </button>
-      </div>
+      </form>
     </div>
   </header>
 </template>
@@ -93,6 +93,27 @@ header.header {
           background: var(--primary);
           color: #f8f8f8;
         }
+      }
+    }
+  }
+}
+@media screen and (max-width: 420px) {
+  header.header {
+    .logo {
+      flex-shrink: 1;
+      font-size: 0.95rem !important;
+    }
+    .search {
+      max-width: 50% !important;
+      flex: 1;
+      height: 34px !important;
+      input {
+        font-size: 0.8rem !important;
+      }
+      button {
+        width: 24px !important;
+        height: 24px !important;
+        right: 3px !important;
       }
     }
   }

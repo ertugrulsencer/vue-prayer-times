@@ -1,18 +1,33 @@
 <template>
   <section class="cards">
     <header class="card-header">
-      <h3 v-if="times.length > 0">
-        <span>{{ city }}</span> için namaz vakitleri
+      <h3 v-if="times && times.length > 0">
+        &#11088; <span>{{ city }}</span> için namaz vakitleri
       </h3>
       <h3 v-else>
-        <span>{{ city }}</span> namaz vakti bulunamadı :(
+        &#128565; <span>{{ city }}</span> namaz vakti bulunamadı
       </h3>
-      <button @click="share" v-if="times.length > 0" class="share-button">
-        <i class="fas fa-share icon"></i>
-        Paylaş
-      </button>
+      <div class="buttons">
+        <button
+          @click="share"
+          v-if="times && times.length > 0"
+          class="share-button"
+        >
+          <i class="fas fa-share icon"></i>
+          Paylaş
+        </button>
+        <a
+          target="_blenk"
+          :href="`https://wa.me?text=${times_text}`"
+          v-if="times && times.length > 0"
+          class="wp-button"
+        >
+          <i class="fas fa-share icon"></i>
+          WhatsApp ile Paylaş
+        </a>
+      </div>
     </header>
-    <table v-if="times.length > 0">
+    <table v-if="times && times.length > 0">
       <thead>
         <tr class="header">
           <th>Vakit</th>
@@ -29,8 +44,8 @@
       </tbody>
     </table>
     <div v-else class="alert-danger">
-      Bu ile ait namaz vakti bulunamadı, lütfen şehir'i değiştirip tekrar
-      deneyiniz.
+      Bu şehire ait namaz vakti bulunamadı &#128533; lütfen şehir'i değiştirip
+      tekrar deneyiniz.
     </div>
   </section>
 </template>
@@ -52,27 +67,51 @@ export default {
       navigator.share({
         title: "Namaz Vakitleri",
         url: window.location.href,
+        text: this.times_text,
       });
     },
   },
-  computed: mapGetters(["times", "city"]),
+  computed: mapGetters(["times", "city", "times_text"]),
 };
 </script>
 
 <style lang="scss">
-.alert-danger {
-  margin-top: 24px;
-  padding: 16px 24px;
-  border-radius: 4px;
-  color: #f8f8f8;
-  background: #c00b;
-  font-weight: 600;
+@media screen and (max-width: 420px) {
+  .card-header {
+    margin-bottom: 0 !important;
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      width: 100%;
+      .wp-button {
+        display: inline-block !important;
+        cursor: pointer;
+        padding: 8px 14px;
+        background: rgba(#13af48, 0.8);
+        border-radius: 28px;
+        color: #f8f8f8;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: 2px solid #13af48;
+        transition: all 300ms ease-in-out;
+        &:hover {
+          background: rgba(#13af48, 0.65);
+        }
+        .icon {
+          margin-right: 6px;
+        }
+      }
+    }
+  }
 }
 .card-header {
   margin: 24px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   .share-button {
     cursor: pointer;
     padding: 8px 14px;
@@ -89,6 +128,9 @@ export default {
     .icon {
       margin-right: 6px;
     }
+  }
+  .wp-button {
+    display: none;
   }
 }
 h3 {
